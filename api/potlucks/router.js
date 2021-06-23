@@ -19,12 +19,12 @@ router.get("/:id", (req, res, next) => {
   });
 
 
-//   router.post("/", (req, res, next) => {
-//     Potlucks.insert(req.body)
-//       .then((potluck) => {
-//         res.status(201).json(potluck);
-//       })
-//       .catch(next);
-//   });
+  router.post("/", (req, res, next) => {
+    Potlucks.insert(req.body)
+      .then((potluck) => {
+        res.status(201).json(potluck);
+      })
+      .catch(next);
+  });
 
 module.exports = router
