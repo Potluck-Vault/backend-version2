@@ -199,13 +199,99 @@ return Promise.all(
       );
     })
       
-
+return potluck
   
     }
 
-    // const remove = (id) => {
-    //   return db("potlucks").where("id", id).first()
-    //   };
+    const remove = async (id) => {
+      return db("potlucks").where({ id }).del();
+    };
+
+
+
+
+
+
+
+
+
+
+
+    const update = async (id, potluck) => {
+      const { items, guests } = potluck;
+
+      console.log(id, potluck)
+    
+      await db.transaction(async (trx) => {
+        const { description, name, date, time, location, image_url } = potluck;
+        // update recipe
+        if (description === undefined || name === undefined || date === undefined || time === undefined || location === undefined || image_url) {
+          console.log(potluck)
+        } else {
+          
+          await trx("potlucks")
+            .where({ id })
+            .update({ description, name, date, time, location, image_url });
+        }
+        
+
+       if (items === undefined ) {
+         console.log(items)
+       }   
+       else if (items || items.length > 0) {   
+         await Promise.all(
+            items.map( async (item, index) => {
+
+
+              //Pulls the item info from the request
+              const itemToUpdate = {
+                id: item.id,
+                item: item.item,
+                claimed: item.claimed,
+                claimedBy: item.claimedBy,
+              }
+             
+            console.log(item.id ,itemToUpdate)
+            
+
+              await trx("items")
+            .where("id", item.id)
+            .update(itemToUpdate);
+
+            })
+          )} 
+
+          if (guests === undefined ) {
+            console.log(guests)
+          }   
+          else if (guests || guests.length > 0) {   
+            await Promise.all(
+               guests.map( async (guest, index) => {
+   
+   
+                 //Pulls the guest info from the request
+                 const guestToUpdate = {
+                   id: guest.id,
+                   guest: guest.guest,
+                    rsvp: guest.rsvp,
+                    contact: guest.contact
+                 }
+                
+               console.log(guest.id, guestToUpdate)
+               
+   
+                 await trx("guests")
+               .where("id", guest.id)
+               .update(guestToUpdate);
+   
+               })
+             )} 
+
+
+      });
+    
+      // return getById(id);
+    };
 
 module.exports = {
   getAll,
@@ -213,6 +299,6 @@ module.exports = {
   getById,
   getByUserId,
   insert,
-//   remove,
-//   update,
+  remove,
+  update,
 };

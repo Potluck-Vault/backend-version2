@@ -19,6 +19,15 @@ router.get("/:id", (req, res, next) => {
   });
 
 
+  router.put("/:id", (req, res, next) => {
+    Potlucks.update(req.params.id, req.body)
+      .then((potlucks) => {
+        res.status(200).json(potlucks);
+      })
+      .catch(next);
+  });
+
+
   router.get("/users/:user_id", (req, res, next) => {
     Potlucks.getByUserId(req.params.user_id)
       .then((potlucks) => {
@@ -35,12 +44,12 @@ router.get("/:id", (req, res, next) => {
       .catch(next);
   });
 
-  // router.delete("/:id", (req, res, next) => {
-  //   Potlucks.getById(req.params.id)
-  //     .then((potlucks) => {
-  //       res.status(200).json(potlucks);
-  //     })
-  //     .catch(next);
-  // });
+  router.delete("/:id", (req, res, next) => {
+    Potlucks.remove(req.params.id)
+      .then((potlucks) => {
+        res.status(200).json(potlucks);
+      })
+      .catch(next);
+  });
 
 module.exports = router
