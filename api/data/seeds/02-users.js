@@ -3,15 +3,20 @@ exports.seed = function (knex) {
         return knex("users").insert([
           {
             email: "test@gpv.com",
-            username: "test",
+            username: "EventMan",
             password:
               "$2b$10$dlapt8PB9kj4oCg.e3agBu7I.n5P8RYUzXGZkULLgTrxbyJjxa2Cy",
           }, // 1
           {
-            email: "test2@gmail.com",
-            username: "example",
+            email: "test@gpv.com",
+            username: "funguyUsername",
             password:
-              "$2b$10$meXVxr/s7VkWjaNIs5b5DODi8b6nqjQA6PwoNZoQ3G5whFcdGagju",
-          }, // 2
+              "$2b$10$dlapt8PB9kj4oCg.e3agBu7I.n5P8RYUzXGZkULLgTrxbyJjxa2Cy",
+          }, {
+            email: "test@gpv.com",
+            username: "Pastor",
+            password:
+              "$2b$10$dlapt8PB9kj4oCg.e3agBu7I.n5P8RYUzXGZkULLgTrxbyJjxa2Cy",
+          }, // 1
         ]);
     }

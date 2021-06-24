@@ -17,11 +17,42 @@ exports.up = function (knex) {
           .onDelete("CASCADE")
           .onUpdate("CASCADE");
       })
+     
+      .createTable("guests", (tbl) => {
+        tbl.increments();
+        tbl.string("guest").notNullable().unique();
+        tbl.string("contact")
+        tbl.boolean("rsvp")
+      })
+      .createTable("potluck-guests", (tbl) => {
+        tbl.increments();
+        tbl
+          .integer("potluck_id")
+          .notNullable()
+          .unsigned()
+          .references("id")
+          .inTable("potlucks")
+          .onDelete("CASCADE")
+          .onUpdate("CASCADE");
+        tbl
+          .integer("guest_id")
+          .notNullable()
+          .unsigned()
+          .references("id")
+          .inTable("guests")
+          .onDelete("CASCADE")
+          .onUpdate("CASCADE");
+      })
       .createTable("items", (tbl) => {
         tbl.increments();
         tbl.string("item", 100).notNullable();
         tbl.boolean("claimed")
-        tbl.string("claimedBy", 100)
+        tbl.integer("claimedBy")
+        .unsigned()
+        .references("id")
+        .inTable("guests")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE");
       })
       .createTable("potluck-items", (tbl) => {
         tbl.increments();
@@ -42,39 +73,15 @@ exports.up = function (knex) {
           .onDelete("CASCADE")
           .onUpdate("CASCADE");
       })
-      .createTable("guests", (tbl) => {
-        tbl.increments();
-        tbl.string("guest").notNullable().unique();
-        tbl.string("contact")
-        tbl.boolean("rsvp")
-      })
-      .createTable("potluck-guests", (tbl) => {
-        tbl.increments();
-        tbl
-          .integer("potluck_id")
-          .notNullable()
-          .unsigned()
-          .references("id")
-          .inTable("items")
-          .onDelete("CASCADE")
-          .onUpdate("CASCADE");
-        tbl
-          .integer("guest_id")
-          .notNullable()
-          .unsigned()
-          .references("id")
-          .inTable("guests")
-          .onDelete("CASCADE")
-          .onUpdate("CASCADE");
-      });
+      
       
   };
   
   exports.down = function (knex) {
     return knex.schema
+    .dropTableIfExists("potluck-items")
+    .dropTableIfExists("items")
     .dropTableIfExists("potluck-guests")
     .dropTableIfExists("guests")
-      .dropTableIfExists("potluck-items")
-      .dropTableIfExists("items")
       .dropTableIfExists("potlucks")
   };
